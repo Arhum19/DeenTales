@@ -1,0 +1,120 @@
+/* Global styles for DeenTales */
+
+:root {
+  --primary-color: #667eea;
+  --secondary-color: #764ba2;
+  --success-color: #4caf50;
+  --error-color: #c62828;
+  --text-color: #333;
+  --text-light: #666;
+  --background: #f5f5f5;
+  --white: #ffffff;
+  --border-color: #ddd;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] {
+  --text-color: #f5f5f5;
+  --text-light: #ccc;
+  --background: #1a1a1a;
+  --white: #2d2d2d;
+  --border-color: #444;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background);
+  color: var(--text-color);
+  overflow-x: hidden;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+p {
+  line-height: 1.6;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+input,
+textarea {
+  font-family: inherit;
+}
+
+/* Utility classes */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-1 {
+  margin-top: 0.5rem;
+}
+.mt-2 {
+  margin-top: 1rem;
+}
+.mt-3 {
+  margin-top: 1.5rem;
+}
+.mt-4 {
+  margin-top: 2rem;
+}
+
+.mb-1 {
+  margin-bottom: 0.5rem;
+}
+.mb-2 {
+  margin-bottom: 1rem;
+}
+.mb-3 {
+  margin-bottom: 1.5rem;
+}
+.mb-4 {
+  margin-bottom: 2rem;
+}
