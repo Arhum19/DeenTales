@@ -36,23 +36,24 @@ const HeroSection = () => {
           {/* Right Visual - Decorative Circles */}
           <div className="relative h-[550px] hidden lg:block">
             {/* Giant Circle (far right, mostly cut off) */}
-            <div className="absolute w-[700px] h-[700px] bg-[#a8c9a9] rounded-full opacity-75 -right-40 top-1/2 -translate-y-1/2"></div>
+            <div className="absolute w-[700px] h-[700px] bg-[#9fbd8b] rounded-full opacity-75 -right-48 -top-16"></div>
 
-            {/* Large Circle (top center) */}
-            <div className="absolute w-[200px] h-[200px] bg-[#a8c9a9] rounded-full opacity-85 left-[30%] top-[10%]"></div>
+            {/* Medium Circle 1 (top left-ish) */}
+            <div className="absolute w-[190px] h-[190px] bg-[#9fbd8b] rounded-full opacity-85 left-[-2%] top-[-10%]"></div>
 
-            {/* Large Circle (bottom center-left) */}
-            <div className="absolute w-[210px] h-[210px] bg-[#a8c9a9] rounded-full opacity-85 left-[25%] bottom-[20%]"></div>
+            {/* Medium Circle 2 (bottom left-ish) */}
+            <div className="absolute w-[190px] h-[190px] bg-[#9fbd8b] rounded-full opacity-85 left-[-11%] bottom-[13%]"></div>
 
             {/* Small Circle 1 (top right) */}
-            <div className="absolute w-[75px] h-[75px] bg-[#d4e4d5] rounded-full opacity-90 right-[30%] top-[8%]"></div>
+            <div className="absolute w-[75px] h-[75px] bg-[#d2d0a0] rounded-full opacity-90 right-[58%] top-[-14%]"></div>
 
-            {/* Small Circle 2 (middle center) */}
-            <div className="absolute w-[70px] h-[70px] bg-[#d4e4d5] rounded-full opacity-90 left-[35%] top-[40%]"></div>
+            {/* Small Circle 2 (center-left) */}
+            <div className="absolute w-[75px] h-[75px] bg-[#d2d0a0] rounded-full opacity-90 left-[7%] top-[32%]"></div>
 
             {/* Small Circle 3 (bottom right) */}
-            <div className="absolute w-[80px] h-[80px] bg-[#d4e4d5] rounded-full opacity-90 right-[20%] bottom-[30%]"></div>
+            <div className="absolute w-[75px] h-[75px] bg-[#d2d0a0] rounded-full opacity-90 right-[71%] bottom-[-1%]"></div>
           </div>
+
         </div>
       </div>
     </section>
