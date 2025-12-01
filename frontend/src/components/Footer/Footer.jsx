@@ -9,7 +9,6 @@ const Footer = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     if (email.trim()) {
-      // Navigate to login or handle email submission
       window.location.href = "/login";
     }
   };
@@ -32,34 +31,33 @@ const Footer = () => {
   return (
     <footer className="w-full bg-[#2a2d3a] text-gray-300">
       {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-          {/* Left Side - Branding & Email */}
-          <div className="space-y-6">
-            {/* Logo/Brand Name */}
-            <h2 className="text-3xl font-bold text-white text-left">
-              Deen Tales
-            </h2>
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
 
-            {/* Email Input & Login Button */}
+          {/* Left Section */}
+          <div className="space-y-6 text-center md:text-left">
+            <h2 className="text-3xl font-bold text-white">Deen Tales</h2>
+
+            {/* Email Form */}
             <form
               onSubmit={handleLogin}
-              className="flex items-center gap-3 max-w-md"
+              className="flex flex-col sm:flex-row items-center gap-3 max-w-md mx-auto md:mx-0"
             >
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email Address"
-                className="flex-1 px-4 py-3 bg-[#374a5e] text-white placeholder-gray-400 rounded-lg outline-none focus:ring-2 focus:ring-[#6b8e6f] text-sm"
+                className="w-full px-4 py-3 bg-[#374a5e] text-white placeholder-gray-400 rounded-lg outline-none focus:ring-2 focus:ring-[#6b8e6f] text-sm"
               />
               <button
                 type="submit"
-                className="px-6 py-3 bg-[#6b8e6f] hover:bg-[#5d7a61] text-white font-semibold rounded-lg transition-colors text-sm uppercase"
+                className="w-full sm:w-auto px-6 py-3 bg-[#6b8e6f] hover:bg-[#5d7a61] text-white font-semibold rounded-lg transition-colors text-sm uppercase"
               >
                 LOGIN
               </button>
             </form>
+
 
             {/* Social Media Icons */}
             <div className="flex items-center gap-6">
@@ -129,24 +127,24 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Right Side - Navigation Links */}
-          <div className="flex justify-end">
-            <nav className="flex items-center gap-8">
+          {/* Right Section - Navigation */}
+          <div className="flex justify-center md:justify-end">
+            <nav className="flex flex-wrap gap-6 justify-center md:justify-end">
               <button
                 onClick={() => scrollToSection("home")}
-                className="text-gray-300 hover:text-white transition-colors text-base font-medium bg-transparent border-none cursor-pointer"
+                className="text-gray-300 hover:text-white transition-colors text-base font-medium"
               >
                 Home
               </button>
               <button
                 onClick={() => scrollToSection("visuals")}
-                className="text-gray-300 hover:text-white transition-colors text-base font-medium bg-transparent border-none cursor-pointer"
+                className="text-gray-300 hover:text-white transition-colors text-base font-medium"
               >
                 Visuals
               </button>
               <button
                 onClick={() => scrollToSection("features")}
-                className="text-gray-300 hover:text-white transition-colors text-base font-medium bg-transparent border-none cursor-pointer"
+                className="text-gray-300 hover:text-white transition-colors text-base font-medium"
               >
                 Features
               </button>
@@ -161,9 +159,9 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Copyright Bar */}
+      {/* Copyright */}
       <div className="bg-white border-t border-gray-200">
-        <div className="max-w-7xl mx-auto px-8 py-4">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 py-4">
           <p className="text-center text-gray-500 text-sm font-bold">
             © 2025 Copyright by DeenTales.com All rights reserved.
           </p>
