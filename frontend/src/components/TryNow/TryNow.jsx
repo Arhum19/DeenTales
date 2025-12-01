@@ -13,35 +13,35 @@ const TryNow = () => {
   };
 
   return (
-    <section className="w-full bg-white py-32 px-8">
+    <section className="w-full bg-white py-20 sm:py-28 lg:py-32 px-4 sm:px-8">
       <div className="max-w-4xl mx-auto">
-        {/* Get Started Card */}
-        <div className="bg-[#a8c9a9] rounded-[2rem] px-16 py-12 shadow-lg">
-          <h2 className="text-4xl font-bold text-white text-center mb-10">
+        {/* Card */}
+        <div className="bg-[#a8c9a9] rounded-3xl px-6 py-10 sm:px-10 sm:py-12 md:px-14 lg:px-16 shadow-lg">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white text-center mb-8 sm:mb-10">
             Get started
           </h2>
 
-          {/* Input Container */}
           <form onSubmit={handleSubmit} className="relative">
+            {/* Input Box */}
             <div className="relative flex items-center bg-white rounded-xl overflow-hidden shadow-sm">
               <input
                 type="text"
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder="Enter the story prompt..."
-                className="flex-1 px-6 py-4 text-gray-400 text-base outline-none"
+                className="flex-1 px-4 sm:px-6 py-3 sm:py-4 text-gray-400 text-sm sm:text-base outline-none"
               />
 
-              {/* Icons Container */}
-              <div className="flex items-center gap-2 pr-4">
-                {/* Microphone Icon */}
+              {/* Icons */}
+              <div className="flex items-center gap-1 sm:gap-2 pr-2 sm:pr-4">
+                {/* Mic */}
                 <button
                   type="button"
                   className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
                   aria-label="Voice input"
                 >
                   <svg
-                    className="w-5 h-5"
+                    className="w-4 h-4 sm:w-5 sm:h-5"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
@@ -50,14 +50,14 @@ const TryNow = () => {
                   </svg>
                 </button>
 
-                {/* Send/Paper Plane Icon */}
+                {/* Send Icon */}
                 <button
                   type="submit"
-                  className="p-2 text-[#a8c9a9] hover:text-[#8fb89a] "
+                  className="p-2 text-[#a8c9a9] hover:text-[#8fb89a] transition-colors"
                   aria-label="Send"
                 >
                   <svg
-                    className="w-5 h-5"
+                    className="w-4 h-4 sm:w-5 sm:h-5"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
