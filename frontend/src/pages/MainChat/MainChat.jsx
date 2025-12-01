@@ -10,6 +10,7 @@ const MainChat = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+
   const navigate = useNavigate();
 
   // Dummy chat history
@@ -35,9 +36,29 @@ const MainChat = () => {
     initConversation();
   }, []);
 
+  useEffect(() => {
+    // This hook runs every time isSidebarOpen changes
+
+    if (isSidebarOpen) {
+      // ✅ Lock the background scroll at the document level
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden'; // For better cross-browser support
+    } else {
+      // ✅ Restore the background scroll
+      document.body.style.overflow = 'unset';
+      document.documentElement.style.overflow = 'unset';
+    }
+
+    // Cleanup function: runs when the component unmounts OR before the effect runs again
+    return () => {
+      document.body.style.overflow = 'unset';
+      document.documentElement.style.overflow = 'unset';
+    };
+
+  }, [isSidebarOpen]);
+
   const handleSend = async () => {
     if (!input.trim()) return;
-
     const userMessage = { role: "user", content: input };
     setMessages([...messages, userMessage]);
     setInput("");
@@ -81,117 +102,197 @@ const MainChat = () => {
   };
 
   const groupedHistory = chatHistory.reduce((acc, chat) => {
-    if (!acc[chat.date]) {
-      acc[chat.date] = [];
-    }
+    if (!acc[chat.date]) acc[chat.date] = [];
     acc[chat.date].push(chat);
     return acc;
   }, {});
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-50 overflow-hidden">
       {/* Sidebar */}
       <div
-        className={`${
-          isSidebarOpen ? "w-64" : "w-0"
-        } bg-[#e8f5e9] transition-all duration-300 overflow-hidden flex flex-col`}
+        className={`bg-[#e8f5e9] text-gray-900 flex flex-col
+      absolute inset-y-0 left-0 z-40 transform transition-transform duration-300
+          
+         ${isSidebarOpen ? "w-64 translate-x-0" : "w-64 -translate-x-full"}
+      
+      md:relative md:inset-y-auto md:left-auto md:bg-[#e8f5e9] md:z-10
+      md:transition-all
+      
+      ${isSidebarOpen ? "md:w-64" : "md:w-0 md:overflow-hidden"}
+        `}
       >
-        <div className="p-4 flex-shrink-0">
-          {/* User Profile */}
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-[#6b8e6f] rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-sm">A</span>
-            </div>
-            <div className="flex-1">
-              <p className="font-semibold text-gray-900">Arhum</p>
-            </div>
-            <button
-              onClick={() => setIsSearchOpen(!isSearchOpen)}
-              className="p-1 hover:bg-white/50 rounded"
-            >
-              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
-          </div>
+        {/* 💡 IMPORTANT: Ensure ALL content is conditionally rendered when open */}
+        {isSidebarOpen && (
+          <div className="flex flex-col flex-1 h-full">
+            <div className="p-4 flex-shrink-0">
 
-          {/* New Chat Button */}
-          <button
-            onClick={handleNewChat}
-            className="w-full bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 mb-4 transition-colors"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            New chat
-          </button>
+              {/* 1. User Profile & Control Icons (Combined Header Row) */}
+              <div className="flex items-center justify-between mb-4">
 
-          {/* Search - Collapsible */}
-          {isSearchOpen && (
-            <div className="relative mb-4">
-              <input
-                type="text"
-                placeholder="Search"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-[#6b8e6f]"
-              />
-              <svg
-                className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+                {/* Left Side: User Profile */}
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-[#6b8e6f] rounded-full flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">A</span>
+                  </div>
+                  <p className="font-semibold text-gray-900">Arhum</p>
+                </div>
+
+                {/* Right Side: Icons (Search and Close) */}
+                <div className="flex items-center gap-1">
+
+                  {/* ✅ Search Button (Now Visible on ALL screens) */}
+                  <button
+                    onClick={() => setIsSearchOpen(!isSearchOpen)}
+                    // Removed 'hidden md:block' so it's visible on mobile as well
+                    className="p-1 hover:bg-white/50 rounded"
+                  >
+                    <svg
+                      className="w-5 h-5 text-gray-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                      />
+                    </svg>
+                  </button>
+
+                  {/* Mobile Close Button (Visible only on screens smaller than md) */}
+                  <button
+                    onClick={() => setIsSidebarOpen(false)}
+                    className="p-1 hover:bg-white/50 rounded md:hidden"
+                  >
+                    <svg
+                      className="w-6 h-6 text-gray-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+
+                </div>
+              </div>
+              {/* END 1. Header Row */}
+
+              {/* New Chat Button */}
+              <button
+                onClick={handleNewChat}
+                className="w-full bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 mb-4 transition-colors"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </div>
-          )}
-        </div>
-
-        {/* Chat History */}
-        <div className="flex-1 overflow-y-auto px-4 pb-4">
-          {Object.entries(groupedHistory).map(([date, chats]) => (
-            <div key={date} className="mb-4">
-              <p className="text-xs text-gray-500 mb-2">{date}</p>
-              {chats.map((chat) => (
-                <button
-                  key={chat.id}
-                  className="w-full text-left px-3 py-2 hover:bg-white/50 rounded-lg mb-1 flex items-center gap-2 text-sm text-gray-700"
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  <span>{chat.icon}</span>
-                  <span className="truncate flex-1">{chat.title}</span>
-                </button>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                New chat
+              </button>
+
+              {/* Search - Collapsible */}
+              {isSearchOpen && (
+                <div className="relative mb-4">
+                  <input
+                    type="text"
+                    placeholder="Search"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-[#6b8e6f]"
+                  />
+                  <svg
+                    className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                </div>
+              )}
+            </div>
+            {/* END p-4 flex-shrink-0 */}
+
+            {/* Chat History */}
+            <div className="flex-1 overflow-y-auto px-4 pb-4">
+              {Object.entries(groupedHistory).map(([date, chats]) => (
+                <div key={date} className="mb-4">
+                  <p className="text-xs text-gray-500 mb-2">{date}</p>
+                  {chats.map((chat) => (
+                    <button
+                      key={chat.id}
+                      className="w-full text-left px-3 py-2 hover:bg-white/50 rounded-lg mb-1 flex items-center gap-2 text-sm text-gray-700"
+                    >
+                      <span>{chat.icon}</span>
+                      <span className="truncate flex-1">{chat.title}</span>
+                    </button>
+                  ))}
+                </div>
               ))}
             </div>
-          ))}
-        </div>
+            {/* END Chat History */}
 
-        {/* Upgrade Section */}
-        <div className="p-4">
-          <div className="bg-white rounded-lg p-3 shadow-sm">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-8 h-8 bg-[#6b8e6f] rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-sm">A</span>
+            {/* Upgrade Section */}
+            <div className="p-4 flex-shrink-0">
+              <div className="bg-white rounded-lg p-3 shadow-sm">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 bg-[#6b8e6f] rounded-full flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">A</span>
+                  </div>
+                  <span className="text-sm font-medium text-gray-900">Arhum</span>
+                  <button className="ml-auto p-1 hover:bg-gray-100 rounded">
+                    <svg
+                      className="w-4 h-4 text-gray-600"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                    </svg>
+                  </button>
+                </div>
+                <button className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1">
+                  Upgrade to Pro{" "}
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
               </div>
-              <span className="text-sm font-medium text-gray-900">Arhum</span>
-              <button className="ml-auto p-1 hover:bg-gray-100 rounded">
-                <svg className="w-4 h-4 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                </svg>
-              </button>
             </div>
-            <button className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1">
-              Upgrade to Pro
-              <svg className="w-x` h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
+            {/* END Upgrade Section */}
           </div>
-        </div>
+        )}
       </div>
+      {/* END Sidebar */}
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col bg-gray-50">
         {/* Header */}
         <div className="bg-white border-b border-gray-200 p-4">
           <div className="flex items-center justify-between">
@@ -200,24 +301,18 @@ const MainChat = () => {
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               >
-                <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="w-6 h-6 text-gray-700"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
-              <button
-                onClick={() => navigate("/")}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              >
-                <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
               <div className="flex items-center gap-2">
-                <img
-                  src="/images/public/logo.png"
-                  alt="Deen Tales Logo"
-                  className="w-10 h-10 object-contain"
-                />
+                {/* Note: /images/public/logo.png requires being available in your public directory */}
+                <img src="/images/public/logo.png" alt="Deen Tales Logo" className="w-10 h-10 object-contain" />
                 <span className="font-semibold text-gray-900">Deen Tales</span>
               </div>
             </div>
@@ -229,6 +324,7 @@ const MainChat = () => {
             </div>
           </div>
         </div>
+        {/* END Header */}
 
         {/* Messages Area */}
         <div className="flex-1 overflow-y-auto">
@@ -243,9 +339,7 @@ const MainChat = () => {
                 {messages.map((msg, index) => (
                   <div
                     key={index}
-                    className={`flex gap-3 ${
-                      msg.role === "user" ? "justify-end" : "justify-start"
-                    }`}
+                    className={`flex gap-3 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                   >
                     {msg.role === "assistant" && (
                       <div className="w-8 h-8 bg-[#6b8e6f] rounded-full flex items-center justify-center flex-shrink-0">
@@ -253,11 +347,8 @@ const MainChat = () => {
                       </div>
                     )}
                     <div
-                      className={`max-w-xl px-4 py-3 rounded-2xl ${
-                        msg.role === "user"
-                          ? "bg-gray-200 text-gray-900"
-                          : "bg-white border border-gray-200 text-gray-900"
-                      }`}
+                      className={`max-w-xl px-4 py-3 rounded-2xl ${msg.role === "user" ? "bg-gray-200 text-gray-900" : "bg-white border border-gray-200 text-gray-900"
+                        }`}
                     >
                       <p className="text-sm leading-relaxed">{msg.content}</p>
                       {msg.role === "assistant" && (
@@ -267,8 +358,18 @@ const MainChat = () => {
                             className="hover:text-gray-600 transition-colors"
                             title="Copy message"
                           >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                              />
                             </svg>
                           </button>
                         </div>
@@ -299,6 +400,7 @@ const MainChat = () => {
             )}
           </div>
         </div>
+        {/* END Messages Area */}
 
         {/* Input Area */}
         <div className="bg-white border-t border-gray-200 p-4">
@@ -327,19 +429,12 @@ const MainChat = () => {
                 className="w-full pl-14 pr-24 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#6b8e6f] focus:border-transparent text-gray-900 placeholder-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed"
               />
               <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
-                <button
-                  type="button"
-                  className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
-                >
+                <button type="button" className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                   </svg>
                 </button>
-                <button
-                  type="submit"
-                  disabled={!input.trim() || isLoading}
-                  className="p-2 text-gray-400 hover:text-[#6b8e6f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
+                <button type="submit" disabled={!input.trim() || isLoading} className="p-2 text-gray-400 hover:text-[#6b8e6f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
                   </svg>
@@ -354,8 +449,11 @@ const MainChat = () => {
             </p>
           </div>
         </div>
+        {/* END Input Area */}
       </div>
+      {/* END Main Chat Area */}
     </div>
+    // END of <div className="flex h-screen bg-gray-50">
   );
 };
 
