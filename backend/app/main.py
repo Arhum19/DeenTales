@@ -1,14 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
-from datetime import datetime
-from fastapi import HTTPException
 from app.database import init_db
 from app.routes.auth import router as auth_router
-from app.utils.password import hash_password, verify_password
-from app.utils.jwt import create_access_token
-from app.models.user import User
-from app.schemas.user import UserCreate, UserLogin
 
 
 @asynccontextmanager
@@ -43,45 +37,7 @@ app.add_middleware(
 async def root():
     return {"message": "DeenTales API running"}
 
-# signup
-
-
-@app.post("/signup")
-async def signup(user: UserCreate):
-
-    existing_user = await User.find_one(User.email == user.email)
-    if existing_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
-
-    new_user = User(
-        username=user.username,
-        email=user.email,
-        password=hash_password(user.password)
-    )
-
-    await new_user.insert()
-
-    return {"message": "User registered successfully"}
-
-# LOGIN
-
-
-@app.post("/login")
-async def login(user: UserLogin):
-
-    db_user = await User.find_one(User.email == user.email)
-    if not db_user:
-        raise HTTPException(status_code=400, detail="Invalid credentials")
-
-    if not verify_password(user.password, db_user.password):
-        raise HTTPException(status_code=400, detail="Invalid credentials")
-
-    token = create_access_token(str(db_user.id))
-
-    return {
-        "access_token": token,
-        "token_type": "bearer"
-    }
+# Authentication routes are provided by `app.routes.auth` (mounted below).
 
 app.include_router(auth_router)
 

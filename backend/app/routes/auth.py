@@ -1,17 +1,16 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends
 from app.models.user import User
 from app.schemas.user import UserCreate, UserLogin
 from app.utils.password import hash_password, verify_password
 from app.utils.jwt import create_access_token
-from fastapi import Depends
 from app.dependencies.auth import get_current_user
-from app.models.user import User
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
 @router.post("/signup", status_code=status.HTTP_201_CREATED)
 async def signup(user: UserCreate):
+    # Check if user already exists
     existing_user = await User.find_one(User.email == user.email)
     if existing_user:
         raise HTTPException(
@@ -19,15 +18,23 @@ async def signup(user: UserCreate):
             detail="Email already registered"
         )
 
+    # Create new user with hashed password
     new_user = User(
         username=user.username,
         email=user.email,
         password=hash_password(user.password)
     )
 
+    # Insert into database
     await new_user.insert()
 
-    return {"message": "User registered successfully"}
+    # Generate access token
+    token = create_access_token(str(new_user.id))
+
+    return {
+        "access_token": token,
+        "token_type": "bearer"
+    }
 
 
 @router.post("/login")
@@ -61,5 +68,3 @@ async def read_me(current_user: User = Depends(get_current_user)):
         "username": current_user.username,
         "email": current_user.email,
     }
-
-

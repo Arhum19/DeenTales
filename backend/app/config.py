@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "dc1b2f311beedcc6ed53b8bcc4c3b63c6352f52408355e66061732546bf4b2a3"
     ALGORITHM: str = "HS256"  # JWT Algorithm
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60  # Token expiry time in minutes
-    User_Collection_Name: str = "Users"  # Default user collection name
+    User_Collection_Name: str = "users"  # Default user collection name
 
     class Config:
         env_file = ".env"

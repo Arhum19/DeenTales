@@ -3,8 +3,6 @@ from beanie import init_beanie
 from app.config import settings
 from app.models.user import User
 
-client: AsyncIOMotorClient | None = None
-
 
 async def init_db():
     global client
@@ -14,3 +12,5 @@ async def init_db():
         database=client[settings.DATABASE_NAME],
         document_models=[User]
     )
+
+    print(f"Connected to MongoDB: {settings.DATABASE_NAME}")

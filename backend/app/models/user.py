@@ -1,7 +1,7 @@
 from beanie import Document
 from beanie.odm.fields import Indexed
 from pydantic import EmailStr, Field
-from typing import Optional
+from typing import Optional, Annotated
 from datetime import datetime, timezone
 
 
@@ -20,7 +20,7 @@ class User(Document):
     
     username: str = Field(..., min_length=3, max_length=50)
     password: str = Field(..., min_length=8)  # Will store hashed password
-    email: Indexed(EmailStr, unique=True)  # Unique index on email
+    email: Annotated[EmailStr, Indexed(unique=True)] = Field(...)  # Unique index on email
     
     # Optional timestamps
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
