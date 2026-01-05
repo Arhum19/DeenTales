@@ -5,7 +5,7 @@ export const authService = {
   // Login user
   async login(email, password) {
     try {
-      const response = await fetch(`${API_URL}/api/auth/login`, {
+      const response = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -14,12 +14,13 @@ export const authService = {
       });
 
       if (!response.ok) {
-        throw new Error("Login failed");
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Login failed");
       }
 
       const data = await response.json();
-      if (data.token) {
-        localStorage.setItem("token", data.token);
+      if (data.access_token) {
+        localStorage.setItem("token", data.access_token);
       }
       return data;
     } catch (error) {
@@ -31,7 +32,7 @@ export const authService = {
   // Signup user
   async signup(userData) {
     try {
-      const response = await fetch(`${API_URL}/api/auth/signup`, {
+      const response = await fetch(`${API_URL}/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -40,7 +41,8 @@ export const authService = {
       });
 
       if (!response.ok) {
-        throw new Error("Signup failed");
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Signup failed");
       }
 
       const data = await response.json();

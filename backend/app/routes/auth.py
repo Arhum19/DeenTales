@@ -28,12 +28,9 @@ async def signup(user: UserCreate):
     # Insert into database
     await new_user.insert()
 
-    # Generate access token
-    token = create_access_token(str(new_user.id))
-
     return {
-        "access_token": token,
-        "token_type": "bearer"
+        "message": "User created successfully",
+        "email": new_user.email
     }
 
 

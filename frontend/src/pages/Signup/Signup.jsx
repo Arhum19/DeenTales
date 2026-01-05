@@ -32,7 +32,7 @@ const Signup = () => {
 
     try {
       await authService.signup({
-        name: `${formData.firstName} ${formData.lastName}`,
+        username: `${formData.firstName} ${formData.lastName}`,
         email: formData.email,
         password: formData.password,
       });
