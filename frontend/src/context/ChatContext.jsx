@@ -1,8 +1,9 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useCallback } from "react";
 import { chatService } from "../services/chatService";
 
 const ChatContext = createContext();
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useChat = () => {
   const context = useContext(ChatContext);
   if (!context) {
@@ -12,92 +13,120 @@ export const useChat = () => {
 };
 
 export const ChatProvider = ({ children }) => {
-  const [conversations, setConversations] = useState([]);
-  const [currentConversation, setCurrentConversation] = useState(null);
+  const [chats, setChats] = useState([]);
+  const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const loadConversations = async () => {
+  const loadChats = useCallback(async () => {
     try {
-      const data = await chatService.getConversations();
-      setConversations(data);
+      const data = await chatService.getAllChats();
+      setChats(data);
     } catch (error) {
-      console.error("Failed to load conversations:", error);
+      console.error("Failed to load chats:", error);
     }
-  };
+  }, []);
 
-  const createConversation = async (title) => {
+  const createChat = useCallback(async (title = "New Chat") => {
     try {
-      const newConv = await chatService.createConversation(title);
-      setConversations([...conversations, newConv]);
-      setCurrentConversation(newConv);
+      const newChat = await chatService.createChat(title);
+      setChats((prev) => [newChat, ...prev]);
+      setCurrentChat(newChat);
       setMessages([]);
-      return newConv;
+      return newChat;
     } catch (error) {
-      console.error("Failed to create conversation:", error);
+      console.error("Failed to create chat:", error);
       throw error;
     }
-  };
+  }, []);
 
-  const sendMessage = async (message) => {
-    if (!currentConversation) {
-      await createConversation();
-    }
-
-    setIsLoading(true);
+  const selectChat = useCallback(async (chatId) => {
     try {
-      const response = await chatService.sendMessage(
-        message,
-        currentConversation?.id
-      );
-
-      const userMessage = { role: "user", content: message };
-      const aiMessage = { role: "assistant", content: response.message };
-
-      setMessages([...messages, userMessage, aiMessage]);
-      return response;
+      const chatData = await chatService.getChatMessages(chatId);
+      setCurrentChat({ id: chatId, title: chatData.chat_title });
+      setMessages(chatData.messages);
+      return chatData;
     } catch (error) {
-      console.error("Failed to send message:", error);
+      console.error("Failed to select chat:", error);
       throw error;
-    } finally {
-      setIsLoading(false);
     }
-  };
+  }, []);
 
-  const loadChatHistory = async (conversationId) => {
-    try {
-      const history = await chatService.getChatHistory(conversationId);
-      setMessages(history);
-      setCurrentConversation({ id: conversationId });
-    } catch (error) {
-      console.error("Failed to load chat history:", error);
-    }
-  };
-
-  const deleteConversation = async (conversationId) => {
-    try {
-      await chatService.deleteConversation(conversationId);
-      setConversations(conversations.filter((c) => c.id !== conversationId));
-      if (currentConversation?.id === conversationId) {
-        setCurrentConversation(null);
-        setMessages([]);
+  const sendMessage = useCallback(
+    async (userMessage, generateImages = false) => {
+      if (!currentChat) {
+        const newChat = await createChat();
+        setCurrentChat(newChat);
       }
-    } catch (error) {
-      console.error("Failed to delete conversation:", error);
-      throw error;
-    }
-  };
+
+      setIsLoading(true);
+      try {
+        const response = await chatService.sendMessage(
+          currentChat?.id,
+          userMessage,
+          generateImages
+        );
+
+        setMessages((prev) => [...prev, response]);
+        await loadChats(); // Refresh to update titles
+        return response;
+      } catch (error) {
+        console.error("Failed to send message:", error);
+        throw error;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [currentChat, createChat, loadChats]
+  );
+
+  const deleteChat = useCallback(
+    async (chatId) => {
+      try {
+        await chatService.deleteChat(chatId);
+        setChats((prev) => prev.filter((c) => c.id !== chatId));
+        if (currentChat?.id === chatId) {
+          setCurrentChat(null);
+          setMessages([]);
+        }
+      } catch (error) {
+        console.error("Failed to delete chat:", error);
+        throw error;
+      }
+    },
+    [currentChat]
+  );
+
+  const updateChatTitle = useCallback(
+    async (chatId, newTitle) => {
+      try {
+        const updated = await chatService.updateChatTitle(chatId, newTitle);
+        setChats((prev) =>
+          prev.map((c) => (c.id === chatId ? { ...c, title: newTitle } : c))
+        );
+        if (currentChat?.id === chatId) {
+          setCurrentChat((prev) => ({ ...prev, title: newTitle }));
+        }
+        return updated;
+      } catch (error) {
+        console.error("Failed to update chat title:", error);
+        throw error;
+      }
+    },
+    [currentChat]
+  );
 
   const value = {
-    conversations,
-    currentConversation,
+    chats,
+    currentChat,
     messages,
     isLoading,
-    loadConversations,
-    createConversation,
+    loadChats,
+    createChat,
+    selectChat,
     sendMessage,
-    loadChatHistory,
-    deleteConversation,
+    deleteChat,
+    updateChatTitle,
   };
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;

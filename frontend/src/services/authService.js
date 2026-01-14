@@ -93,4 +93,29 @@ export const authService = {
   isAuthenticated() {
     return !!this.getToken();
   },
+
+  // Get current user info
+  async getUser() {
+    try {
+      const token = this.getToken();
+      if (!token) return null;
+
+      const response = await fetch(`${API_URL}/auth/me`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        return null;
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Get user error:", error);
+      return null;
+    }
+  },
 };
