@@ -6,6 +6,7 @@ import Signup from "./pages/Signup/Signup";
 import OAuth from "./pages/OAuth/OAuth";
 import MainChat from "./pages/MainChat/MainChat";
 import TryFree from "./pages/TryFree/TryFree";
+// import TestAPI from "./pages/test/TestAPI.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -39,5 +40,9 @@ export const router = createBrowserRouter([
   {
     path: "/try-free",
     element: <TryFree />,
-  },
+   }
+  // {
+  //   path: "/test",
+  //   element: <TestAPI />
+  // }
 ]);

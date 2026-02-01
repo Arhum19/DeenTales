@@ -1,3 +1,13 @@
+## Group Members
+
+- **Eishal Khan** (SP23-BSCS-0031)
+- **Muhammad Bassam Yousaf** (SP23-BSCS-0072)
+- **Arhum bin Abid** (SP23-BSCS-0040)
+- **Safiyah Asif Khan** (SP23-BSCS-0037)
+- **Waniya Khan** (SP23-BSCS-0010)
+
+# DeenTales Frontend
+
 # DeenTales - AI-Powered Storytelling Platform
 
 An interactive platform for AI-driven storytelling and visual creation with GPT-powered chat and image generation capabilities.
@@ -24,86 +34,74 @@ An interactive platform for AI-driven storytelling and visual creation with GPT-
 
 ## 🏗️ Project Structure
 
+```text
 deentales/
-│
-├── frontend/ # React frontend
-│ ├── public/
-│ │ ├── images/
-│ │ │ ├── public/ # Public visuals (hero images, icons)
-│ │ │ └── private/ # Restricted visuals (user-generated, internal)
-│ │ ├── index.html
-│ │ └── favicon.ico
-│ │
-│ ├── src/
-│ │ ├── assets/ # Logos, backgrounds, etc.
-│ │ ├── components/ # Reusable UI parts
-│ │ │ ├── Navbar/
-│ │ │ ├── HeroSection/
-│ │ │ ├── Features/
-│ │ │ ├── VisualsSection/
-│ │ │ ├── TryNow/
-│ │ │ └── Footer/
-│ │ │
-│ │ ├── pages/ # Each route/page
-│ │ │ ├── Home/
-│ │ │ ├── Login/
-│ │ │ ├── Signup/
-│ │ │ ├── OAuth/
-│ │ │ ├── MainChat/ # Main GPT-like interface
-│ │ │ └── TryFree/
-│ │ │
-│ │ ├── context/ # React contexts (Auth, Theme, Chat)
-│ │ ├── hooks/ # Custom React hooks
-│ │ ├── services/ # API calls to backend
-│ │ │ ├── authService.js
-│ │ │ ├── chatService.js
-│ │ │ └── imageService.js
-│ │ ├── styles/ # Global CSS or Tailwind config
-│ │ ├── App.js
-│ │ ├── main.jsx
-│ │ └── router.js # React Router setup
-│ │
-│ └── package.json
-│
-├── backend/ # Python backend (FastAPI recommended)
-│ ├── app/
-│ │ ├── main.py # Entry point
-│ │ ├── api/
-│ │ │ ├── routes/
-│ │ │ │ ├── auth.py # Login, signup, Google OAuth
-│ │ │ │ ├── chat.py # AI chatbot routes
-│ │ │ │ ├── image.py # AI image generation
-│ │ │ │ └── user.py
-│ │ │ └── **init**.py
-│ │ ├── core/
-│ │ │ ├── config.py # Env setup
-│ │ │ ├── security.py # JWT, OAuth helpers
-│ │ │ └── utils.py
-│ │ ├── models/ # Database models
-│ │ │ ├── user.py
-│ │ │ ├── chat_history.py
-│ │ │ └── attempt.py
-│ │ ├── services/ # AI and image services
-│ │ │ ├── chat_engine.py # Text generation (e.g. OpenAI API)
-│ │ │ └── image_engine.py # Visual generation (e.g. DALL·E / Stability)
-│ │ ├── database/ # DB connection setup
-│ │ │ ├── connection.py
-│ │ │ └── crud.py
-│ │ └── schemas/ # Pydantic models
-│ │ ├── user_schema.py
-│ │ ├── chat_schema.py
-│ │ └── image_schema.py
-│ │
-│ ├── requirements.txt
-│ └── .env
-│
-├── docs/ # Documentation, API references
-│ ├── README.md
-│ └── api_docs.md
-│
+├── .vscode/
+├── backend/
+│   ├── app/
+│   │   ├── dependencies/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── schemas/
+│   │   ├── services/
+│   │   ├── utils/
+│   │   ├── __pycache__/
+│   │   ├── config.py
+│   │   ├── database.py
+│   │   └── main.py
+│   ├── venv/
+│   ├── .env
+│   ├── .env.example
+│   ├── main.py
+│   └── requirements.txt
+├── data/
+│   ├── 
+│   └── main_df.csv 
+│   ├── hadith
+│   └── names_of_Allah
+│   ├── quran
+│   └── surahs
+│   ├── tafseer
+│   └── translation
+├── docs/
+│   ├── README.md
+│   └── api_docs.md
+├── documentation/
+│   ├── COMMANDS.md
+│   ├── HOW_TO_USE_VENV.md
+│   ├── README.md
+│   ├── SETUP_GUIDE.md
+│   └── VENV_GUIDE.md
+├── frontend/
+│   ├── node_modules/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── context/
+│   │   ├── hooks/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   ├── styles/
+│   │   ├── App.css
+│   │   ├── App.jsx
+│   │   ├── index.css
+│   │   ├── main.jsx
+│   │   └── router.jsx
+│   ├── .env.example
+│   ├── .gitignore
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── postcss.config.js
+│   ├── README.md
+│   ├── tailwind.config.js
+│   ├── TAILWIND_SETUP.md
+│   └── vite.config.js
 ├── .gitignore
-├── README.md
-└── main.py
+├── readme.md
+└── requirements.txt
+```
 
 ---
 

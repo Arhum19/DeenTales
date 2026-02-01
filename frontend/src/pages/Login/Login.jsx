@@ -25,6 +25,25 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-8">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-lg p-8 relative">
+        <Link
+          to="/"
+          aria-label="Back to home"
+          className="absolute left-4 top-4 inline-flex items-center justify-center w-9 h-9 rounded-full bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-colors"
+        >
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </Link>
 
         {/* Title */}
         <h2 className="text-3xl font-bold text-center text-gray-900 mb-3 mt-2">
@@ -49,7 +68,6 @@ const Login = () => {
               className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-[#6b8e6f] focus:border-transparent text-gray-900 placeholder-gray-500"
               required
             />
-
           </div>
 
           {/* Password Input */}

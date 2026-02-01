@@ -37,11 +37,11 @@ const TryFree = () => {
     setIsLoading(true);
 
     try {
-      const response = await chatService.sendMessage(inputMessage);
+      const response = await chatService.sendPublicMessage(inputMessage);
       const botMessage = {
         id: messages.length + 2,
         type: "bot",
-        text: response.message || "I'm here to help you!",
+        text: response.ai_message || "I'm here to help you!",
       };
       setMessages((prev) => [...prev, botMessage]);
       setAttemptCount((prev) => prev + 1);
@@ -64,11 +64,12 @@ const TryFree = () => {
       {/* ---------- HEADER ---------- */}
       <div className="bg-white border-b border-gray-200 p-3 sm:p-4">
         <div className="w-full flex items-center justify-between px-2 sm:px-6">
-
           {/* LEFT SIDE */}
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* <button
+            <button
+              type="button"
               onClick={() => navigate("/")}
+              aria-label="Back to home"
               className="p-2 hover:bg-gray-100 rounded-full transition-colors"
             >
               <svg
@@ -77,9 +78,14 @@ const TryFree = () => {
                 stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
               </svg>
-            </button> */}
+            </button>
 
             <div className="flex items-center gap-1 sm:gap-2">
               <img
@@ -95,7 +101,6 @@ const TryFree = () => {
 
           {/* RIGHT SIDE */}
           <div className="flex items-center gap-1 sm:gap-2">
-
             <button className="w-8 h-8 sm:w-10 sm:h-10 bg-[#6b8e6f] rounded-full flex items-center justify-center">
               <svg
                 className="w-4 h-4 sm:w-5 sm:h-5 text-white"
@@ -103,7 +108,10 @@ const TryFree = () => {
                 stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
                   d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                 />
               </svg>
@@ -118,25 +126,31 @@ const TryFree = () => {
           {messages.map((message) => (
             <div
               key={message.id}
-              className={`flex gap-2 sm:gap-3 ${message.type === "user" ? "justify-end" : "justify-start"
-                }`}
+              className={`flex gap-2 sm:gap-3 ${
+                message.type === "user" ? "justify-end" : "justify-start"
+              }`}
             >
               {message.type === "bot" && (
                 <div className="w-7 h-7 sm:w-8 sm:h-8 bg-[#6b8e6f] rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-xs sm:text-sm">DT</span>
+                  <span className="text-white font-bold text-xs sm:text-sm">
+                    DT
+                  </span>
                 </div>
               )}
 
               <div
-                className={`max-w-[80%] sm:max-w-xl px-3 py-2 sm:px-4 sm:py-3 rounded-2xl ${message.type === "user"
+                className={`max-w-[80%] sm:max-w-xl px-3 py-2 sm:px-4 sm:py-3 rounded-2xl ${
+                  message.type === "user"
                     ? "bg-gray-200"
                     : "bg-white border border-gray-200"
-                  }`}
+                }`}
               >
                 {message.type === "bot" ? (
                   <div className="flex flex-col">
                     {/* Message Text */}
-                    <p className="text-left text-xs sm:text-sm leading-relaxed">{message.text}</p>
+                    <p className="text-left text-xs sm:text-sm leading-relaxed">
+                      {message.text}
+                    </p>
 
                     {/* Copy Icon on the left-bottom */}
                     <div className="mt-1 flex justify-start">
@@ -161,15 +175,17 @@ const TryFree = () => {
                     </div>
                   </div>
                 ) : (
-                  <p className="text-left text-xs sm:text-sm leading-relaxed">{message.text}</p>
+                  <p className="text-left text-xs sm:text-sm leading-relaxed">
+                    {message.text}
+                  </p>
                 )}
               </div>
 
-
-
               {message.type === "user" && (
                 <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                  <span className="text-gray-600 font-bold text-xs sm:text-sm">U</span>
+                  <span className="text-gray-600 font-bold text-xs sm:text-sm">
+                    U
+                  </span>
                 </div>
               )}
             </div>
@@ -179,7 +195,9 @@ const TryFree = () => {
           {isLoading && (
             <div className="flex gap-2 sm:gap-3">
               <div className="w-7 h-7 sm:w-8 sm:h-8 bg-[#6b8e6f] rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-xs sm:text-sm">DT</span>
+                <span className="text-white font-bold text-xs sm:text-sm">
+                  DT
+                </span>
               </div>
 
               <div className="bg-white border border-gray-200 px-3 py-2 sm:px-4 sm:py-3 rounded-2xl">
@@ -197,7 +215,6 @@ const TryFree = () => {
       {/* ---------- INPUT AREA ---------- */}
       <div className="bg-white border-t border-gray-200 p-3 sm:p-4">
         <div className="max-w-3xl mx-auto">
-
           {showLimitMessage && (
             <div className="mb-3 sm:mb-4 bg-gray-100 border border-gray-300 rounded-xl p-3 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
               <p className="text-xs sm:text-sm text-gray-700 text-center sm:text-left">
@@ -224,10 +241,20 @@ const TryFree = () => {
             />
 
             <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2 sm:gap-3">
-
-              <button type="button" className="p-1 sm:p-2 text-gray-400 hover:text-gray-600">
-                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+              <button
+                type="button"
+                className="p-1 sm:p-2 text-gray-400 hover:text-gray-600"
+              >
+                <svg
+                  className="w-4 h-4 sm:w-5 sm:h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
                     d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
                   />
                 </svg>
@@ -238,7 +265,11 @@ const TryFree = () => {
                 disabled={!inputMessage.trim() || showLimitMessage || isLoading}
                 className="p-1 sm:p-2 text-gray-400 hover:text-[#6b8e6f] disabled:opacity-50"
               >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
                 </svg>
               </button>
@@ -246,7 +277,8 @@ const TryFree = () => {
           </form>
 
           <p className="text-[10px] sm:text-xs text-center text-gray-400 mt-3">
-            Deen Tales can produce accurate information about islam, names, or fact&nbsp;
+            Deen Tales can produce accurate information about islam, names, or
+            fact&nbsp;
             <a href="/privacy" className="underline hover:text-gray-600">
               Privacy Notice
             </a>

@@ -1,6 +1,14 @@
+## Group Members
+
+- **Eishal Khan** (SP23-BSCS-0031)  
+- **Muhammad Bassam Yousaf** (SP23-BSCS-0072)  
+- **Arhum bin Abid** (SP23-BSCS-0040)  
+- **Safiyah Asif Khan** (SP23-BSCS-0037)  
+- **Waniya Khan** (SP23-BSCS-0010)
 # DeenTales Frontend
 
 React frontend application for DeenTales AI-powered storytelling and visual creation platform.
+
 
 ## Features
 
